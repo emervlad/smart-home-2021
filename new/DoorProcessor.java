@@ -1,32 +1,35 @@
 package ru.sbt.mipt.oop;
 
-import static ru.sbt.mipt.oop.SensorEventType.LIGHT_OFF;
-import static ru.sbt.mipt.oop.SensorEventType.LIGHT_ON;
+
+import static ru.sbt.mipt.oop.SensorEventType.*;
 
 public class DoorProcessor implements EventTypeProcessor{
     @Override
-    public void DoorLightProcessor(SensorEvent event, SmartHome smartHome) {
-        if (event.getType() == LIGHT_ON || event.getType() == LIGHT_OFF) {
-            // событие от источника света
-            for (Room room : smartHome.getRooms()) {
-                for (Light light : room.getLights()) {
-                    if (light.getId().equals(event.getObjectId())) {
-                        if (event.getType() == LIGHT_ON) {
-                            light.setOn(true);
-                            printStatus(light.getId(), room.getName(), true);
+    public void processEvent(SensorEvent event, SmartHome smartHome) {
+        if (event.getType() == DOOR_OPEN || event.getType() == DOOR_CLOSED) {
+            // событие от двери
+            smartHome.execute(homeComponent -> {
+                if (homeComponent instanceof Door) {
+                    Door door = (Door) homeComponent;
+                    if (door.getId().equals(event.getObjectId())) {
+                        if (event.getType() == DOOR_OPEN) {
+                            door.setOpen(true);
+                            printStatus(door.getId(), true);
                         } else {
-                            light.setOn(false);
-                            printStatus(light.getId(), room.getName(), false);
+                            door.setOpen(false);
+                            printStatus(door.getId(), false);
                         }
                     }
                 }
-            }
+            });
         }
     }
 
-    @Override
-    public void printStatus(String id, String name, boolean is) {
-            String f = is ? "on" : "off";
-            System.out.println("Light " + id + " in room " + name + " was turned " + f + ".");
+
+    public void printStatus(String id, boolean is) {
+        String f = is ? "opened" : "closed";
+        System.out.println("Door " + id + " in room " + " was " + f + ".");
     }
+
+
 }

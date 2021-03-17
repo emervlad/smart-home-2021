@@ -1,7 +1,5 @@
 package ru.sbt.mipt.oop;
 
-import static ru.sbt.mipt.oop.SensorEventType.*;
-
 public class EventProcessor {
     private final EventCreator sensorEventCreator;
 
@@ -13,8 +11,8 @@ public class EventProcessor {
         SensorEvent event = sensorEventCreator.getNextEvent();
         while (event != null) {
             System.out.println("Got event: " + event);
-            new LightProcessor().DoorLightProcessor(event, smartHome);
-            new DoorProcessor().DoorLightProcessor(event, smartHome);
+            new DoorProcessor().processEvent(event, smartHome);
+            new LightProcessor().processEvent(event, smartHome);
             event = sensorEventCreator.getNextEvent();
         }
     }
