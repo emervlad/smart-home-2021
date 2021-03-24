@@ -13,11 +13,10 @@ public class EventProcessor {
 
     public void processEvent(SmartHome smartHome) {
         SensorEvent event = sensorEventCreator.getNextEvent();
+        Decorator decorator = new Decorator(processorList);
         while (event != null) {
             System.out.println("Got event: " + event);
-            for (EventTypeProcessor eventTypeProcessor : processorList) {
-                eventTypeProcessor.processEvent(event, smartHome);
-            }
+            decorator.processEvent(event, smartHome);
             event = sensorEventCreator.getNextEvent();
         }
     }

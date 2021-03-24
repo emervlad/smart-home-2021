@@ -13,6 +13,10 @@ public class Room implements Actionable {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public void execute(Action action) {
         action.apply(this);

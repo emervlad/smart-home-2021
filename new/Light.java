@@ -9,6 +9,10 @@ public class Light implements Actionable{
         this.isOn = isOn;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public boolean isOn() {
         return isOn;
     }

@@ -6,21 +6,21 @@ import java.util.Arrays;
 public class Application {
 
     public static void main(String... args) throws IOException {
-        Application application = new Application(new EventProcessor(new EventCreatorImpl(), Arrays.asList(new LightProcessor(), new DoorProcessor(), new HallDoorProcessor())), new HomeReaderJS("smart-home-1.js"));
+        Application application = new Application(new EventProcessor(new EventCreatorImpl(), Arrays.asList(new LightProcessor(), new DoorProcessor(), new HallDoorProcessor(), new AlarmProcessor())), new HomeReaderJS("smart-home-1.js"));
         application.run();
     }
 
     private final EventProcessor processor;
-    private final HomeReader homeGetter;
+    private final HomeReader homeReader;
 
-    public Application(EventProcessor processor, HomeReader homeGetter) {
+    public Application(EventProcessor processor, HomeReader homeReader) {
         this.processor = processor;
-        this.homeGetter = homeGetter;
+        this.homeReader = homeReader;
     }
 
     public void run() throws IOException {
         // считываем состояние дома из файла
-        SmartHome smartHome = homeGetter.getSmartHome();
+        SmartHome smartHome = homeReader.getSmartHome();
         processor.processEvent(smartHome);
     }
 }
