@@ -9,15 +9,15 @@ public class SignalizationTest {
     @Test
     public void stateChanges() {
         Signalization signalization = new Signalization();
-        assertTrue(signalization.getState() instanceof DeactiveState);
+        assertTrue(signalization.isDeactivate());
 
         signalization.activate("Glina");
-        assertTrue(signalization.getState() instanceof ActiveState);
+        assertTrue(signalization.isActive());
         signalization.deactivate("Clay");
-        assertTrue(signalization.getState() instanceof AlarmState);
+        assertTrue(signalization.isAlarm());
 
         signalization.deactivate("Glina");
-        assertTrue(signalization.getState() instanceof DeactiveState);
+        assertTrue(signalization.isDeactivate());
     }
 
 }

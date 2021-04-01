@@ -3,11 +3,19 @@ package ru.sbt.mipt.oop;
 public class Signalization implements State {
     private State state = new DeactiveState(this);
 
-    public State getState() {
-        return state;
+    boolean isDeactivate() {
+        return (this.state instanceof DeactiveState);
     }
 
-    public void setState(State state) {
+    boolean isActive() {
+        return (this.state instanceof ActiveState);
+    }
+
+    boolean isAlarm() {
+        return (this.state instanceof AlarmState);
+    }
+
+    void setState(State state) {
         this.state = state;
     }
 
