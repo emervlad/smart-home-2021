@@ -1,7 +1,6 @@
 package ru.sbt.mipt.oop;
 
 import java.util.Collection;
-import static ru.sbt.mipt.oop.SensorEventType.*;
 
 public class SignalizationDecorator implements EventTypeProcessor {
     private final Collection<EventTypeProcessor> eventHandlers;
@@ -12,12 +11,10 @@ public class SignalizationDecorator implements EventTypeProcessor {
 
     @Override
     public void processEvent(SensorEvent event, SmartHome smartHome) {
-        if (smartHome.getSignalization().isActive() && !((event.getType() == ALARM_ACTIVATE)
-                || event.getType() == ALARM_DEACTIVATE)) {
+        if (smartHome.getSignalization().getState() instanceof ActiveState && !(event instanceof SignalizationEvent)) {
             smartHome.getSignalization().switchToAlarm();
         }
-        if (smartHome.getSignalization().isAlarm() && !((event.getType() == ALARM_ACTIVATE)
-                || event.getType() == ALARM_DEACTIVATE)) {
+        if (smartHome.getSignalization().getState() instanceof AlarmState && !(event instanceof SignalizationEvent)) {
             SensorCommand.sendSms();
         } else {
             for (EventTypeProcessor eventHandler : eventHandlers) {
@@ -25,4 +22,5 @@ public class SignalizationDecorator implements EventTypeProcessor {
             }
         }
     }
+
 }

@@ -1,7 +1,11 @@
 package ru.sbt.mipt.oop;
 
-public class Signalization implements State {
+public class Signalization implements Actionable {
     private State state = new DeactiveState(this);
+
+    public State getState() {
+        return state;
+    }
 
     boolean isDeactivate() {
         return (this.state instanceof DeactiveState);
@@ -19,19 +23,20 @@ public class Signalization implements State {
         this.state = state;
     }
 
-    @Override
     public void activate(String code) {
         state.activate(code);
     }
 
-    @Override
     public void deactivate(String code) {
         state.deactivate(code);
     }
 
-    @Override
     public void switchToAlarm() {
         state.switchToAlarm();
     }
 
+    @Override
+    public void execute(Action action) {
+        action.apply(this);
+    }
 }
