@@ -3,10 +3,6 @@ package ru.sbt.mipt.oop;
 public class Signalization implements Actionable {
     private State state = new DeactiveState(this);
 
-    public State getState() {
-        return state;
-    }
-
     boolean isDeactivate() {
         return (this.state instanceof DeactiveState);
     }

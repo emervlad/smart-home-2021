@@ -11,10 +11,10 @@ public class SignalizationDecorator implements EventTypeProcessor {
 
     @Override
     public void processEvent(SensorEvent event, SmartHome smartHome) {
-        if (smartHome.getSignalization().getState() instanceof ActiveState && !(event instanceof SignalizationEvent)) {
+        if (smartHome.getSignalization().isActive() && !(event instanceof SignalizationEvent)) {
             smartHome.getSignalization().switchToAlarm();
         }
-        if (smartHome.getSignalization().getState() instanceof AlarmState && !(event instanceof SignalizationEvent)) {
+        if (smartHome.getSignalization().isAlarm() && !(event instanceof SignalizationEvent)) {
             SensorCommand.sendSms();
         } else {
             for (EventTypeProcessor eventHandler : eventHandlers) {
