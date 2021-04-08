@@ -13,7 +13,7 @@ import java.util.Map;
 public class HomeConfiguration {
     @Bean
     SmartHome smartHome() throws IOException {
-        return new SmartHome(Reader.getSmartHome().getRooms());
+        return new SmartHome((new HomeReaderJS("smart-home-1.js")).getSmartHome().getRooms());
     }
 
     @Bean
