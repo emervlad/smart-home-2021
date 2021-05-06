@@ -5,6 +5,7 @@ import java.util.Collection;
 
 public class SmartHome implements Actionable {
     Collection<Room> rooms;
+    private final Signalization signalization = new Signalization();
 
     public SmartHome() {
         rooms = new ArrayList<>();
@@ -14,8 +15,16 @@ public class SmartHome implements Actionable {
         this.rooms = rooms;
     }
 
+    public Signalization getSignalization() {
+        return signalization;
+    }
+
     public void addRoom(Room room) {
         rooms.add(room);
+    }
+
+    public Collection<Room> getRooms() {
+        return rooms;
     }
 
     @Override
