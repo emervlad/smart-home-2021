@@ -21,5 +21,5 @@ public class SensorCommand {
         System.out.println("Pretent we're sending command " + this.toString());
     }
 
-    public static void sendSms() {System.out.println("Sending sms");}
+    public void sendSms() {System.out.println("Sending sms");}
 }
