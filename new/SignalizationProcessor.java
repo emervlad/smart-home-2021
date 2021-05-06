@@ -1,5 +1,7 @@
 package ru.sbt.mipt.oop;
 
+import java.util.logging.Logger;
+
 public class SignalizationProcessor implements EventTypeProcessor{
     @Override
     public void processEvent(SensorEvent event, SmartHome smartHome) {

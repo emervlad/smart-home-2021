@@ -1,26 +1,39 @@
 package ru.sbt.mipt.oop;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class SignalizationDecorator implements EventTypeProcessor {
-    private final Collection<EventTypeProcessor> eventHandlers;
+    private static final Logger logger = Logger.getLogger(SignalizationDecorator.class.getName());
 
-    public SignalizationDecorator(Collection<EventTypeProcessor> eventHandlers) {
-        this.eventHandlers = eventHandlers;
+    private final List<EventTypeProcessor> eventTypeProcessorList;
+
+    public SignalizationDecorator(List<EventTypeProcessor> eventTypeProcessorList) {
+        this.eventTypeProcessorList = eventTypeProcessorList;
     }
 
     @Override
-    public void processEvent(SensorEvent event, SmartHome smartHome) {
-        if (smartHome.getSignalization().isActive() && !(event instanceof SignalizationEvent)) {
-            smartHome.getSignalization().switchToAlarm();
+    public void processEvent(SensorEvent event ,SmartHome smartHome) {
+        if (isAlarmEvent(event)) {
+            return;
         }
-        if (smartHome.getSignalization().isAlarm() && !(event instanceof SignalizationEvent)) {
-            SensorCommand.sendSms();
-        } else {
-            for (EventTypeProcessor eventHandler : eventHandlers) {
-                eventHandler.processEvent(event, smartHome);
-            }
+
+        if (smartHome.getSignalization().isAlarm()) {
+            logger.fine(("Sensor detection."));
+            logger.info("Sending sms.");
+            return;
+        }
+
+        eventTypeProcessorList.forEach(handler -> handler.processEvent(event, smartHome));
+
+        if (smartHome.getSignalization().isActive()) {
+            smartHome.getSignalization().switchToAlarm();
+            logger.fine("Sensor detection.");
+            logger.info("Sending sms.");
         }
     }
 
+    private boolean isAlarmEvent(SensorEvent event) {
+        return event.getType() == SensorEventType.ALARM_DEACTIVATE || event.getType() == SensorEventType.ALARM_ACTIVATE;
+    }
 }
