@@ -3,6 +3,7 @@ package ru.sbt.mipt.oop;
 import com.coolcompany.smarthome.events.SensorEventsManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import rc.RemoteControlRegistry;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -63,6 +64,61 @@ public class HomeConfiguration {
     @Bean
     SensorEventsManagerMain eventsManager(EventTypeProcessor eventTypeProcessor, SmartHome smartHome) {
         return new SensorEventsManagerMain(eventTypeProcessor, stringToType(), smartHome);
+    }
+
+    @Bean
+    String codeForSignalization() {
+        // there may be some logic here for get random code
+        return "123456";
+    }
+
+    @Bean
+    CloseFrontDoorCommand closeFrontDoorCommand(SmartHome smartHome) {
+        return new CloseFrontDoorCommand(smartHome);
+    }
+
+    @Bean
+    ActiveStateCommand activeStateCommand(SmartHome smartHome) {
+        return new ActiveStateCommand(smartHome, codeForSignalization());
+    }
+
+    @Bean
+    AlarmStateCommand alarmStateCommand(SmartHome smartHome) {
+        return new AlarmStateCommand(smartHome);
+    }
+
+    @Bean
+    TurnOffAllLightsCommand turnOffAllLightsCommand(SmartHome smartHome) {
+        return new TurnOffAllLightsCommand(smartHome);
+    }
+
+    @Bean
+    TurnOnAllLightsCommand turnOnAllLightsCommand(SmartHome smartHome) {
+        return new TurnOnAllLightsCommand(smartHome);
+    }
+
+    @Bean
+    TurnOnHallLightCommand turnOnHallLightCommand(SmartHome smartHome) {
+        return new TurnOnHallLightCommand(smartHome);
+    }
+
+    @Bean
+    RemoteControlRegistry remoteControlRegistry(SmartHome smartHome) {
+        RemoteControlRegistry remoteControlRegistry = new RemoteControlRegistry();
+        remoteControlRegistry.registerRemoteControl(remoteControl(smartHome), "id1");
+        return remoteControlRegistry;
+    }
+
+    @Bean
+    RemoteControlImpl remoteControl(SmartHome smartHome) {
+        return new RemoteControlImpl(Map.of("id1", Map.of(
+                "A", closeFrontDoorCommand(smartHome),
+                "B", activeStateCommand(smartHome),
+                "C", alarmStateCommand(smartHome),
+                "1", turnOffAllLightsCommand(smartHome),
+                "2", turnOnAllLightsCommand(smartHome),
+                "3", turnOnHallLightCommand(smartHome)
+        )));
     }
 
     @Bean
